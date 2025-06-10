@@ -1,6 +1,7 @@
 import express, { urlencoded } from "express"
 import dotenv from "dotenv"
 import authRouter from "../routes/auth.route.js"
+import msgRouter from "../routes/msg.route.js"
 import cookieparser from "cookie-parser"
 dotenv.config()
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieparser())
 
 app.use("/api/auth",authRouter)
+app.use("/api/message",msgRouter)
 
 
 

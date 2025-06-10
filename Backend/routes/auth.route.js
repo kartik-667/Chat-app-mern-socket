@@ -127,7 +127,7 @@ router.put("/updateprofile",protectRoute,async (req,res)=>{
 
     res.status(200).json(updateduser)
     } catch (error) {
-        return res.status(500)
+        return res.status(500).json({error:"some internal error occured"})
         
     }
    
