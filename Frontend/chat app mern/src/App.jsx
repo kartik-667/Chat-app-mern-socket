@@ -10,7 +10,7 @@ import {useAuthstore} from './store/useAuthstore.js'
 
 import {Loader} from 'lucide-react'
 import Setting from './components/Setting.jsx'
-
+import {Toaster} from 'react-hot-toast'
 
 const App = () => {
   const {authUser,checkAuth, ischeckingAuth}=useAuthstore()
@@ -32,6 +32,7 @@ const App = () => {
   
   return (
     <div>
+      <Toaster></Toaster>
       <Navbar></Navbar>
       
       <Routes>
