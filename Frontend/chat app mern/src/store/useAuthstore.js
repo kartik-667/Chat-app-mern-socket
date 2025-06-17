@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 import axiosInstance from '../lib/axios.js';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 //zustand is global state management, as a replacement
 // to context api
@@ -55,7 +56,32 @@ export const useAuthstore=create((set)=>({
             toast.error(error.response.data.message)
             
         }
-    }
+    },
+    login: async (data)=>{
+        try {
+            set({isloggingin:true})
+            const res=await axiosInstance.post("/auth/login",data)
+            
+            toast.success("login successful")
+            set({authUser:res.data})
+            
+        } catch (error) {
+             const status = error?.response?.status;
+             if(status ===404){
+                toast.error("Account not found/Invalid credentials")
+                
+            }else if(status ===500){
+                toast.error("some error occured"+error.message)
+
+            }
+
+            
+        }finally{
+            set({isloggingin:false})
+            
+        }
+
+    },
 
 
 }));
