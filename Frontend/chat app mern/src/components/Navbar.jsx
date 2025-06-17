@@ -16,7 +16,7 @@ function Navbar() {
       </div>
       
     </div>
-    <a className="btn btn-ghost text-xl">Chat app</a>
+    <Link to="/home" className="btn btn-ghost text-xl">Chat app</Link>
   </div>
   <div className="navbar  lg:flex">
   </div>
