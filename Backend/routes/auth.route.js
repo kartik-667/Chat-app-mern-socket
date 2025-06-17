@@ -115,7 +115,7 @@ router.post("/logout",(req,res)=>{
 router.put("/updateprofile",protectRoute,async (req,res)=>{
     // res.send("update page here")
     try {
-         const {profilepic} = req.body
+    const {profilepic} = req.body
     const userid=req.user._id
 
     if(!profilepic) {
@@ -123,7 +123,7 @@ router.put("/updateprofile",protectRoute,async (req,res)=>{
     }
     const uploadresponse=await cloudinary.uploader.upload(profilepic)
 
-    const updateduser=await User.findByIdAndUpdate(userid,{profilepic:uploadresponse.secure_url},{new:true})
+    const updateduser=await User.findByIdAndUpdate(userid,{profilepic:uploadresponse.secure_url},{new:true}).select("-password")
 
     res.status(200).json(updateduser)
     } catch (error) {
