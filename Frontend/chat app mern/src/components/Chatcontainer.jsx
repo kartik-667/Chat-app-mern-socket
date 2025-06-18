@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useChatstore } from '../store/useChatstore.js'
 import Chatheader from './smallcompo/Chatheader.jsx'
 import Messageinput from './smallcompo/Messageinput.jsx'
@@ -9,6 +9,8 @@ import {datetime} from '../lib/util.js'
 function Chatcontainer() {
   const {messages, selectedUser, ismessageloading,sendMessage,getMessages, subscribeToMessages, unsubscribeToMessages}= useChatstore()
   const {authUser}=useAuthstore()
+  const messageEndRef=useRef(null)
+
 
   useEffect(() => {
     // if(!selectedUser?._id) return
@@ -20,7 +22,14 @@ function Chatcontainer() {
 
   }, [getMessages, selectedUser._id, subscribeToMessages, unsubscribeToMessages])
 
-  console.log(messages);
+  useEffect(() => {
+    if(messages && messageEndRef.current){
+      messageEndRef.current.scrollIntoView({behavior:"smooth"})
+    }
+  }, [messages])
+  
+
+  // console.log(messages);
   
   
 
@@ -32,7 +41,7 @@ function Chatcontainer() {
       
     <div className='flex-1 overflow-y-auto p-4 space-y-4'>
     {messages.map((ele)=>
-        <div key={ele._id} className={`chat ${ele.senderid ==authUser._id ? "chat-end" : "chat-start"} `}>
+        <div key={ele._id} ref={messageEndRef} className={`chat ${ele.senderid ==authUser._id ? "chat-end" : "chat-start"} ` }>
           <div className='chat-header mb-1'>
             <time datetime="" className='text-sm opacity-50 ml-1'>{datetime(ele.createdAt)}</time>
             

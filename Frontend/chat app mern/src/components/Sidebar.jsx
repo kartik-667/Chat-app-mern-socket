@@ -31,7 +31,10 @@ const Sidebar = () => {
         <div className="flex items-center gap-2">
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
+          
+
         </div>
+        <span className="ml-8 text-sm">{onlineUsers.length-1} Online </span>
       </div>
 
       <div className="overflow-y-auto w-full py-3">
