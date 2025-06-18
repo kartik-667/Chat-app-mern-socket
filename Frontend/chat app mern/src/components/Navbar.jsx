@@ -1,6 +1,9 @@
 import React from 'react'
 import { useAuthstore } from '../store/useAuthstore.js'
 import {Link} from 'react-router-dom'
+
+import { Settings,UserPen  } from 'lucide-react'
+
 function Navbar() {
 
   const {logout, authUser}=useAuthstore()
@@ -25,11 +28,11 @@ function Navbar() {
      <ul className="menu menu-horizontal px-1">
       <li>
 
-      <Link to="/setting">Settings</Link>
+      <Link to="/setting"><Settings />Settings</Link>
       </li>
       <li>
        
-      <Link to="/profile">Profile</Link>
+      <Link to="/profile"><UserPen />Profile</Link>
       </li>
     </ul></>)
     

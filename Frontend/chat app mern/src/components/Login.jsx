@@ -80,7 +80,7 @@ function Login() {
 <fieldset className="fieldset ">
   <legend className="fieldset-legend">Enter password</legend>
   <div className="flex items-center gap-2">
-    <input name='password' value={userdata.password} onChange={(e)=> setuserdata({...userdata, password:e.target.value})} type={showpass ? "password":"text"} className="input flex-1" placeholder="Type here" />
+    <input name='password' value={userdata.password} onChange={(e)=> setuserdata({...userdata, password:e.target.value})} type={!showpass ? "password":"text"} className="input flex-1" placeholder="Type here" />
     <button onClick={()=> setshowpass(!showpass)} type="button">
       <svg  className='h-7 w-7 bg-white rounded-md' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g strokeWidth="0"></g>
