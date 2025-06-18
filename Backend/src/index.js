@@ -4,13 +4,11 @@ import authRouter from "../routes/auth.route.js"
 import msgRouter from "../routes/msg.route.js"
 import cookieparser from "cookie-parser"
 dotenv.config()
+import { app , server} from "../lib/socket.js"
 import cors from "cors"
 
 
 import connectDB from "../lib/db.js"
-
-
-const app=express()
 
 app.use(express.json({limit:"5mb"}))
 app.use(express.urlencoded({extended:true, limit:"5mb"}))
@@ -26,7 +24,7 @@ app.use("/api/message",msgRouter)
 
 
 
-app.listen(process.env.PORT,()=>{
+server.listen(process.env.PORT,()=>{
     console.log("Listening on port ");
     connectDB();
     

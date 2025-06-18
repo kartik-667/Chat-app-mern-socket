@@ -2,17 +2,23 @@ import {create} from 'zustand';
 import axiosInstance from '../lib/axios.js';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import {io} from 'socket.io-client'
 
 //zustand is global state management, as a replacement
 // to context api
 
-export const useAuthstore=create((set)=>({
+const BASE_URL="http://localhost:9000"
+
+
+
+export const useAuthstore=create((set , get)=>({
     authUser:null,
     issigningup:false,
     isloggingin:false,
     isupdatingprofile:false,
     ischeckingAuth:true,
     onlineUsers:[],
+    socket:null,
     
     checkAuth: async ()=>{
         try {
@@ -20,7 +26,10 @@ export const useAuthstore=create((set)=>({
                 withCredentials:true
             })
 
+            
+
             set({authUser:res.data})
+            get().connectSocket()
             
         } catch (error) {
             console.log("some error occured",error.message);
@@ -38,6 +47,7 @@ export const useAuthstore=create((set)=>({
             const res=await axiosInstance.post("/auth/signup",data)
             toast.success("Account created successfully !!!")
             set({authUser:res.data})
+            get().connectSocket()
             
         } catch (error) {
             toast.error(error.response.data.message)
@@ -47,11 +57,14 @@ export const useAuthstore=create((set)=>({
         }
         
     },
+
     logout:async ()=>{
         try {
             const res=await axiosInstance.post("/auth/logout")
             toast.success("Logged out successfully")
             set({authUser:null})
+
+            get().disconnectSocket()
             
         } catch (error) {
             toast.error(error.response.data.message)
@@ -65,6 +78,8 @@ export const useAuthstore=create((set)=>({
             
             toast.success("login successful")
             set({authUser:res.data})
+
+            get().connectSocket()
             
         } catch (error) {
              const status = error?.response?.status;
@@ -97,6 +112,39 @@ export const useAuthstore=create((set)=>({
         }finally{
             set({isupdatingprofile:false})
         }
+
+    },
+
+    connectSocket:()=>{
+        const {authUser}=get()
+        if(!authUser || get().socket) return
+
+        const socket=io(BASE_URL,{
+            query:{
+                userId:authUser._id, //this sends data to backend along with socket
+            }
+        })
+        socket.connect()
+
+        set({socket:socket})
+
+        socket.on("getOnlineUsers",(userIds)=>{
+            set({onlineUsers:userIds})
+        })
+
+    },
+
+    disconnectSocket:()=>{
+        const {socket}=get()
+
+        if(socket?.connected){
+            socket.disconnect()
+            console.log("socket disconnected");
+            set({socket:null})
+            
+        }
+
+        
 
     }
 

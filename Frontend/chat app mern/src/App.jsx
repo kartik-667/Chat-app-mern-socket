@@ -14,7 +14,9 @@ import {Toaster} from 'react-hot-toast'
 import Profile from './components/Profile.jsx'
 
 const App = () => {
-  const {authUser,checkAuth, ischeckingAuth}=useAuthstore()
+  const {authUser,checkAuth, ischeckingAuth, onlineUsers}=useAuthstore()
+  console.log(onlineUsers);
+  
 
   useEffect(() => {
     checkAuth()

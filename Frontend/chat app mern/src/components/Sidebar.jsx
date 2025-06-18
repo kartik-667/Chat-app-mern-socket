@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Users } from "lucide-react";
 import { useChatstore } from "../store/useChatstore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
+import { useAuthstore } from "../store/useAuthstore";
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setselecteduser, isuserloading } = useChatstore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const {onlineUsers}=useAuthstore()
 
   useEffect(() => {
     getUsers();
@@ -49,12 +51,15 @@ const Sidebar = () => {
                 alt={user.name}
                 className="size-12 object-cover rounded-full"
               />
+              {onlineUsers.includes(user._id) && (
+                <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900"></span>
+              )}
               
             </div>
 
             <div className="hidden lg:block text-left min-w-0">
               <div className="font-medium truncate">{user.name}</div>
-              <div className="text-sm text-zinc-400">Offline</div>
+              {onlineUsers.includes(user._id) ? <div className="text-sm text-zinc-400">Online</div> : <div className="text-sm text-zinc-400">Offline</div> }
             </div>
           </button>
         ))}

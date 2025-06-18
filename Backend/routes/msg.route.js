@@ -3,6 +3,7 @@ import { protectRoute } from "../middleware/auth.controller.js"
 import User from "../models/user.model.js"
 import Message from "../models/message.model.js"
 import cloudinary from "../lib/cloudinary.js"
+import { getReceiverSocketId, io } from "../lib/socket.js"
 
 const msgRouter=express.Router()
 
@@ -74,6 +75,10 @@ msgRouter.post("/send/:id",protectRoute,async (req,res)=>{
         })
 
         //real time using socket.io here for future
+        if(newmsg){
+            const rec_socket_id=getReceiverSocketId(receiverId)
+            io.to(rec_socket_id).emit("newMessage",newmsg)
+        }
         
         if(newmsg){
             return res.status(201).json(newmsg)

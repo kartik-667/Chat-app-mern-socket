@@ -7,13 +7,18 @@ import {datetime} from '../lib/util.js'
 
 
 function Chatcontainer() {
-  const {messages, selectedUser, ismessageloading,sendMessage,getMessages}= useChatstore()
+  const {messages, selectedUser, ismessageloading,sendMessage,getMessages, subscribeToMessages, unsubscribeToMessages}= useChatstore()
   const {authUser}=useAuthstore()
 
   useEffect(() => {
+    // if(!selectedUser?._id) return
+    if(!selectedUser) return
     getMessages(selectedUser._id)
+    subscribeToMessages()
 
-  }, [getMessages, selectedUser._id])
+    return ()=> unsubscribeToMessages();
+
+  }, [getMessages, selectedUser._id, subscribeToMessages, unsubscribeToMessages])
 
   console.log(messages);
   
